@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard - Uganda FarmMarket</title>
+    <meta name="description" content="Manage your farm products and communicate with customers on Uganda's premier agricultural marketplace.">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i data-lucide="leaf" class="brand-icon"></i>
+                <span class="brand-text">Uganda FarmMarket</span>
+                <span class="role-badge seller">Seller Dashboard</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Marketplace</a>
+                <a href="#products" class="nav-link">My Products</a>
+                <a href="#orders" class="nav-link">Orders</a>
+                <a href="#analytics" class="nav-link">Analytics</a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="btn btn-ghost chat-button" onclick="openSellerChat()">
+                    <i data-lucide="message-circle"></i>
+                    <span class="notification-badge">3</span>
+                    Customer Messages
+                </button>
+                <div class="user-menu">
+                    <div class="user-avatar">F</div>
+                    <div>
+                        <div style="font-size: 14px; font-weight: 500;">Farm Owner</div>
+                        <button class="btn btn-ghost" style="padding: 0; font-size: 12px;" onclick="logout()">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main style="margin-top: 80px;">
+        <!-- Dashboard Header -->
+        <section class="dashboard-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="welcome-section">
+                        <h1>Welcome back, Farm Owner!</h1>
+                        <p>Manage your products and connect with customers across Uganda</p>
+                    </div>
+                    <div class="quick-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">15</div>
+                            <div class="stat-label">Active Products</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">New Orders</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">156,000</div>
+                            <div class="stat-label">Total Revenue (shs)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Management -->
+        <section class="dashboard-section" id="products">
+            <div class="container">
+                <div class="section-header">
+                    <h2>My Products</h2>
+                    <button class="btn btn-primary" onclick="openAddProductModal()">
+                        <i data-lucide="plus"></i>
+                        Add New Product
+                    </button>
+                </div>
+                
+                <div class="products-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Price (shs)</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="product-cell">
+                                        <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&h=60" alt="Matooke" class="product-thumb">
+                                        <div>
+                                            <div class="product-name">Fresh Matooke</div>
+                                            <div class="product-desc">Green bananas from Buganda</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Vegetables</td>
+                                <td>15,000</td>
+                                <td>50 bunches</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <button class="btn btn-ghost btn-sm" onclick="editProduct('prod-1')">
+                                        <i data-lucide="edit"></i>
+                                    </button>
+                                    <button class="btn btn-ghost btn-sm" onclick="toggleProduct('prod-1')">
+                                        <i data-lucide="eye-off"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="product-cell">
+                                        <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&h=60" alt="Tomatoes" class="product-thumb">
+                                        <div>
+                                            <div class="product-name">Fresh Tomatoes</div>
+                                            <div class="product-desc">Juicy red tomatoes from Kasese</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Vegetables</td>
+                                <td>5,000</td>
+                                <td>100 kg</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <button class="btn btn-ghost btn-sm" onclick="editProduct('prod-3')">
+                                        <i data-lucide="edit"></i>
+                                    </button>
+                                    <button class="btn btn-ghost btn-sm" onclick="toggleProduct('prod-3')">
+                                        <i data-lucide="eye-off"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="product-cell">
+                                        <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&h=60" alt="Milk" class="product-thumb">
+                                        <div>
+                                            <div class="product-name">Fresh Milk</div>
+                                            <div class="product-desc">Pure cow milk from Ankole cattle</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Dairy</td>
+                                <td>2,500</td>
+                                <td>25 liters</td>
+                                <td><span class="status-badge low-stock">Low Stock</span></td>
+                                <td>
+                                    <button class="btn btn-ghost btn-sm" onclick="editProduct('prod-5')">
+                                        <i data-lucide="edit"></i>
+                                    </button>
+                                    <button class="btn btn-ghost btn-sm" onclick="toggleProduct('prod-5')">
+                                        <i data-lucide="eye-off"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Orders -->
+        <section class="dashboard-section" id="orders">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Recent Orders</h2>
+                    <button class="btn btn-secondary">View All Orders</button>
+                </div>
+                
+                <div class="orders-grid">
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div class="order-id">#ORD-001</div>
+                            <div class="order-status pending">Pending</div>
+                        </div>
+                        <div class="order-customer">
+                            <i data-lucide="user"></i>
+                            John Mukasa from Kampala
+                        </div>
+                        <div class="order-items">
+                            3x Fresh Matooke, 2x Tomatoes
+                        </div>
+                        <div class="order-total">Total: 55,000 shs</div>
+                        <div class="order-actions">
+                            <button class="btn btn-primary btn-sm">Accept Order</button>
+                            <button class="btn btn-ghost btn-sm">Contact Customer</button>
+                        </div>
+                    </div>
+
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div class="order-id">#ORD-002</div>
+                            <div class="order-status confirmed">Confirmed</div>
+                        </div>
+                        <div class="order-customer">
+                            <i data-lucide="user"></i>
+                            Sarah Namukasa from Entebbe
+                        </div>
+                        <div class="order-items">
+                            5x Fresh Milk, 1x Sweet Potatoes
+                        </div>
+                        <div class="order-total">Total: 16,500 shs</div>
+                        <div class="order-actions">
+                            <button class="btn btn-primary btn-sm">Mark as Shipped</button>
+                            <button class="btn btn-ghost btn-sm">Contact Customer</button>
+                        </div>
+                    </div>
+
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div class="order-id">#ORD-003</div>
+                            <div class="order-status shipped">Shipped</div>
+                        </div>
+                        <div class="order-customer">
+                            <i data-lucide="user"></i>
+                            Peter Ssali from Jinja
+                        </div>
+                        <div class="order-items">
+                            2x Posho Flour, 4x Sweet Bananas
+                        </div>
+                        <div class="order-total">Total: 35,650 shs</div>
+                        <div class="order-actions">
+                            <button class="btn btn-primary btn-sm">Mark as Delivered</button>
+                            <button class="btn btn-ghost btn-sm">Contact Customer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Seller Chat Modal -->
+    <div class="modal" id="seller-chat-modal">
+        <div class="modal-content chat-modal-content">
+            <div class="modal-header">
+                <h3>Customer Messages</h3>
+                <button class="modal-close" onclick="closeSellerChat()">&times;</button>
+            </div>
+            
+            <div class="chat-customers-list">
+                <div class="customer-chat-item active" onclick="selectCustomer('customer-1')">
+                    <div class="customer-avatar">J</div>
+                    <div class="customer-info">
+                        <div class="customer-name">John Mukasa</div>
+                        <div class="last-message">Do you have fresh matooke available?</div>
+                    </div>
+                    <div class="message-badge">2</div>
+                </div>
+                
+                <div class="customer-chat-item" onclick="selectCustomer('customer-2')">
+                    <div class="customer-avatar">S</div>
+                    <div class="customer-info">
+                        <div class="customer-name">Sarah Namukasa</div>
+                        <div class="last-message">When will my order be ready?</div>
+                    </div>
+                    <div class="message-badge">1</div>
+                </div>
+                
+                <div class="customer-chat-item" onclick="selectCustomer('customer-3')">
+                    <div class="customer-avatar">P</div>
+                    <div class="customer-info">
+                        <div class="customer-name">Peter Ssali</div>
+                        <div class="last-message">Thank you for the quality produce!</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-conversation">
+                <div class="chat-messages" id="seller-chat-messages">
+                    <div class="chat-message other">
+                        <div class="message-sender">John Mukasa</div>
+                        <div class="message-text">Hello! Do you have fresh matooke available for tomorrow?</div>
+                        <div class="message-time">2 hours ago</div>
+                    </div>
+                    <div class="chat-message own">
+                        <div class="message-text">Yes, we have fresh matooke from our Buganda farm. How many bunches do you need?</div>
+                        <div class="message-time">1 hour ago</div>
+                    </div>
+                    <div class="chat-message other">
+                        <div class="message-sender">John Mukasa</div>
+                        <div class="message-text">I need about 5 bunches. What's the price?</div>
+                        <div class="message-time">30 minutes ago</div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <input type="text" id="seller-chat-input" placeholder="Type your response to John..." />
+                    <button class="btn btn-primary" onclick="sendSellerMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div class="modal" id="add-product-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Product</h3>
+                <button class="modal-close" onclick="closeAddProductModal()">&times;</button>
+            </div>
+            
+            <form class="product-form" id="add-product-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Product Name</label>
+                        <input type="text" placeholder="e.g., Fresh Matooke" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select required>
+                            <option value="">Select category</option>
+                            <option value="vegetables">Vegetables</option>
+                            <option value="fruits">Fruits</option>
+                            <option value="grains">Grains</option>
+                            <option value="dairy">Dairy</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Price (shs)</label>
+                        <input type="number" placeholder="15000" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Stock Quantity</label>
+                        <input type="number" placeholder="50" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea placeholder="Describe your product..." rows="3" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Product Image URL</label>
+                    <input type="url" placeholder="https://example.com/image.jpg">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-ghost" onclick="closeAddProductModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Notifications -->
+    <div class="notifications" id="notifications"></div>
+
+    <!-- JavaScript -->
+    <script src="seller-dashboard.js"></script>
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Uganda FarmMarket</title>
+    <meta name="description" content="Manage the Uganda FarmMarket platform - users, products, orders and system analytics.">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i data-lucide="leaf" class="brand-icon"></i>
+                <span class="brand-text">Uganda FarmMarket</span>
+                <span class="role-badge admin">Admin Panel</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Marketplace</a>
+                <a href="#users" class="nav-link">Users</a>
+                <a href="#products" class="nav-link">All Products</a>
+                <a href="#orders" class="nav-link">Orders</a>
+                <a href="#analytics" class="nav-link">Analytics</a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="btn btn-ghost" onclick="openSystemSettings()">
+                    <i data-lucide="settings"></i>
+                    Settings
+                </button>
+                <div class="user-menu">
+                    <div class="user-avatar admin-avatar">A</div>
+                    <div>
+                        <div style="font-size: 14px; font-weight: 500;">Administrator</div>
+                        <button class="btn btn-ghost" style="padding: 0; font-size: 12px;" onclick="logout()">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main style="margin-top: 80px;">
+        <!-- Dashboard Overview -->
+        <section class="dashboard-header admin-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="welcome-section">
+                        <h1>Admin Dashboard</h1>
+                        <p>Manage the Uganda FarmMarket platform and monitor system health</p>
+                    </div>
+                    <div class="admin-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i data-lucide="users"></i></div>
+                            <div class="stat-details">
+                                <div class="stat-value">1,247</div>
+                                <div class="stat-label">Total Users</div>
+                                <div class="stat-change positive">+12% this month</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i data-lucide="package"></i></div>
+                            <div class="stat-details">
+                                <div class="stat-value">856</div>
+                                <div class="stat-label">Active Products</div>
+                                <div class="stat-change positive">+8% this week</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i data-lucide="shopping-cart"></i></div>
+                            <div class="stat-details">
+                                <div class="stat-value">2,341</div>
+                                <div class="stat-label">Total Orders</div>
+                                <div class="stat-change positive">+25% this month</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i data-lucide="banknote"></i></div>
+                            <div class="stat-details">
+                                <div class="stat-value">45.2M</div>
+                                <div class="stat-label">Revenue (shs)</div>
+                                <div class="stat-change positive">+18% this month</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Users Management -->
+        <section class="dashboard-section" id="users">
+            <div class="container">
+                <div class="section-header">
+                    <h2>User Management</h2>
+                    <div class="section-filters">
+                        <select class="filter-select">
+                            <option value="all">All Users</option>
+                            <option value="customers">Customers</option>
+                            <option value="sellers">Sellers</option>
+                            <option value="admins">Admins</option>
+                        </select>
+                        <button class="btn btn-secondary">Export Users</button>
+                    </div>
+                </div>
+                
+                <div class="users-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Joined</th>
+                                <th>Orders</th>
+                                <th>Revenue</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="user-cell">
+                                        <div class="user-avatar">J</div>
+                                        <div>
+                                            <div class="user-name">John Mukasa</div>
+                                            <div class="user-email">john.mukasa@email.com</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="role-badge customer">Customer</span></td>
+                                <td>Dec 15, 2024</td>
+                                <td>8 orders</td>
+                                <td>125,000 shs</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <button class="btn btn-ghost btn-sm" onclick="viewUser('user-1')">
+                                        <i data-lucide="eye"></i>
+                                    </button>
+                                    <button class="btn btn-ghost btn-sm" onclick="editUser('user-1')">
+                                        <i data-lucide="edit"></i>
+                                    </button>
+                                    <button class="btn btn-ghost btn-sm text-red" onclick="suspendUser('user-1')">
+                                        <i data-lucide="ban"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="user-cell">
+                                        <div class="user-avatar">M</div>
+                                        <div>
+                                            <div class="user-name">Mary Nakato (Farm Owner)</div>
+                                            <div class="user-email">mary.nakato@farmmail.com</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="role-badge seller">Seller</span></td>
+                                <td>Nov 28, 2024</td>
+                                <td>45 products</td>
+                                <td>850,000 shs</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <button class="btn btn-ghost btn-sm" onclick="viewUser('user-2')">
+                                        <i data-lucide="eye"></i>
+                                    </button>
+                                    <button class="btn btn-ghost btn-sm" onclick="editUser('user-2')">
+                                        <i data-lucide="edit"></i>
+                                    </button>
+                                    <button class="btn btn-ghost btn-sm text-red" onclick="suspendUser('user-2')">
+                                        <i data-lucide="ban"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="user-cell">
+                                        <div class="user-avatar">P</div>
+                                        <div>
+                                            <div class="user-name">Peter Ssali</div>
+                                            <div class="user-email">peter.ssali@email.com</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="role-badge customer">Customer</span></td>
+                                <td>Jan 03, 2025</td>
+                                <td>3 orders</td>
+                                <td>67,500 shs</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <button class="btn btn-ghost btn-sm" onclick="viewUser('user-3')">
+                                        <i data-lucide="eye"></i>
+                                    </button>
+                                    <button class="btn btn-ghost btn-sm" onclick="editUser('user-3')">
+                                        <i data-lucide="edit"></i>
+                                    </button>
+                                    <button class="btn btn-ghost btn-sm text-red" onclick="suspendUser('user-3')">
+                                        <i data-lucide="ban"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Platform Analytics -->
+        <section class="dashboard-section" id="analytics">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Platform Analytics</h2>
+                    <div class="time-filter">
+                        <button class="btn btn-ghost active">Last 7 Days</button>
+                        <button class="btn btn-ghost">Last 30 Days</button>
+                        <button class="btn btn-ghost">Last 3 Months</button>
+                    </div>
+                </div>
+                
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <h3>Revenue Trends</h3>
+                            <i data-lucide="trending-up"></i>
+                        </div>
+                        <div class="analytics-content">
+                            <div class="revenue-chart">
+                                <div class="chart-placeholder">
+                                    <i data-lucide="bar-chart-3"></i>
+                                    <p>Revenue growing by 18% monthly</p>
+                                    <div class="trend-indicators">
+                                        <div class="trend-item">
+                                            <span class="trend-label">This Month</span>
+                                            <span class="trend-value positive">+45.2M shs</span>
+                                        </div>
+                                        <div class="trend-item">
+                                            <span class="trend-label">Last Month</span>
+                                            <span class="trend-value">38.3M shs</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <h3>Popular Categories</h3>
+                            <i data-lucide="pie-chart"></i>
+                        </div>
+                        <div class="analytics-content">
+                            <div class="category-stats">
+                                <div class="category-item">
+                                    <div class="category-info">
+                                        <span class="category-name">Vegetables</span>
+                                        <span class="category-percentage">45%</span>
+                                    </div>
+                                    <div class="category-bar">
+                                        <div class="category-fill" style="width: 45%"></div>
+                                    </div>
+                                </div>
+                                <div class="category-item">
+                                    <div class="category-info">
+                                        <span class="category-name">Fruits</span>
+                                        <span class="category-percentage">28%</span>
+                                    </div>
+                                    <div class="category-bar">
+                                        <div class="category-fill" style="width: 28%"></div>
+                                    </div>
+                                </div>
+                                <div class="category-item">
+                                    <div class="category-info">
+                                        <span class="category-name">Grains</span>
+                                        <span class="category-percentage">18%</span>
+                                    </div>
+                                    <div class="category-bar">
+                                        <div class="category-fill" style="width: 18%"></div>
+                                    </div>
+                                </div>
+                                <div class="category-item">
+                                    <div class="category-info">
+                                        <span class="category-name">Dairy</span>
+                                        <span class="category-percentage">9%</span>
+                                    </div>
+                                    <div class="category-bar">
+                                        <div class="category-fill" style="width: 9%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <h3>Regional Distribution</h3>
+                            <i data-lucide="map-pin"></i>
+                        </div>
+                        <div class="analytics-content">
+                            <div class="region-stats">
+                                <div class="region-item">
+                                    <span class="region-name">Central (Kampala, Entebbe)</span>
+                                    <span class="region-value">562 users</span>
+                                </div>
+                                <div class="region-item">
+                                    <span class="region-name">Eastern (Jinja, Mbale)</span>
+                                    <span class="region-value">298 users</span>
+                                </div>
+                                <div class="region-item">
+                                    <span class="region-name">Western (Mbarara, Kasese)</span>
+                                    <span class="region-value">215 users</span>
+                                </div>
+                                <div class="region-item">
+                                    <span class="region-name">Northern (Gulu, Lira)</span>
+                                    <span class="region-value">172 users</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- System Health -->
+        <section class="dashboard-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>System Health</h2>
+                </div>
+                
+                <div class="health-grid">
+                    <div class="health-card">
+                        <div class="health-indicator green"></div>
+                        <div class="health-info">
+                            <div class="health-title">Server Status</div>
+                            <div class="health-value">Operational</div>
+                        </div>
+                    </div>
+                    <div class="health-card">
+                        <div class="health-indicator green"></div>
+                        <div class="health-info">
+                            <div class="health-title">Database</div>
+                            <div class="health-value">Connected</div>
+                        </div>
+                    </div>
+                    <div class="health-card">
+                        <div class="health-indicator yellow"></div>
+                        <div class="health-info">
+                            <div class="health-title">Payment Gateway</div>
+                            <div class="health-value">Slow Response</div>
+                        </div>
+                    </div>
+                    <div class="health-card">
+                        <div class="health-indicator green"></div>
+                        <div class="health-info">
+                            <div class="health-title">Chat System</div>
+                            <div class="health-value">Active</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Notifications -->
+    <div class="notifications" id="notifications"></div>
+
+    <!-- JavaScript -->
+    <script src="admin-panel.js"></script>
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

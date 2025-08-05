@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uganda FarmMarket - Fresh Produce Direct from Farmers</title>
+    <meta name="description" content="Connect with local Ugandan farmers and get the freshest matooke, posho, milk and more delivered to your home. Uganda's premier agricultural marketplace.">
+    
+    <!-- Open Graph tags for social sharing -->
+    <meta property="og:title" content="Uganda FarmMarket - Fresh Produce Direct from Farmers">
+    <meta property="og:description" content="Connect with local Ugandan farmers and get fresh produce delivered to your home">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://uganda-farmmarket.com">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+        import { getDatabase, ref, set, get, child } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
+        
+        // Firebase configuration - will be populated with environment variables
+        const firebaseConfig = {
+            apiKey: "demo-key",
+            authDomain: "demo-project.firebaseapp.com",
+            projectId: "demo-project",
+            storageBucket: "demo-project.firebasestorage.app",
+            appId: "demo-app-id"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+        
+        // Make Firebase available globally
+        window.firebase = { auth, database, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, ref, set, get, child };
+    </script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i data-lucide="leaf" class="brand-icon"></i>
+                <span class="brand-text">Uganda FarmMarket</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="#home" class="nav-link">Products</a>
+                <a href="#categories" class="nav-link">Categories</a>
+                <a href="#about" class="nav-link">About</a>
+            </div>
+            
+            <div class="nav-actions" id="nav-actions">
+                <button class="btn btn-ghost cart-button" onclick="openCart()">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="notification-badge" id="cart-count" style="display: none;">0</span>
+                </button>
+                <button class="btn btn-ghost chat-button" onclick="openChat()">
+                    <i data-lucide="message-circle"></i>
+                    <span class="notification-badge">2</span>
+                </button>
+                <button class="btn btn-primary" onclick="openAuthModal()">Sign In</button>
+                <button class="btn btn-secondary" onclick="openSellerSignup()">Sell Products</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="auth-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="brand-header">
+                    <i data-lucide="leaf" class="brand-icon"></i>
+                    <span class="brand-text">Uganda FarmMarket</span>
+                </div>
+                <h2>Join our farming community</h2>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            
+            <div class="auth-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="login">Sign In</button>
+                    <button class="tab-button" data-tab="signup">Sign Up</button>
+                </div>
+                
+                <div class="tab-content">
+                    <!-- Login Form -->
+                    <form class="auth-form active" id="login-form">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="login-email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="login-password" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sign In</button>
+                    </form>
+                    
+                    <!-- Signup Form -->
+                    <form class="auth-form" id="signup-form">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="signup-name" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="signup-email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <select id="signup-role">
+                                <option value="customer">Customer</option>
+                                <option value="seller">Seller</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="signup-password" placeholder="Create a password" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" id="signup-confirm-password" placeholder="Confirm your password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Fresh Ugandan Produce Direct From Farm</h1>
+                    <p>Connect with local Ugandan farmers and get the freshest matooke, posho, milk and more delivered to your home.</p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" onclick="scrollToProducts()">Shop Now</button>
+                        <button class="btn btn-secondary" onclick="openSellerSignup()">Join as Seller</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" alt="Fresh Ugandan produce" />
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section class="products-section" id="products">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Fresh Ugandan Produce</h2>
+                    <p>Discover authentic Ugandan agricultural products from local farmers across Uganda - from Buganda's matooke to Ankole's fresh milk</p>
+                </div>
+                
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>Category:</label>
+                        <select id="category-filter">
+                            <option value="all">All Categories</option>
+                            <option value="vegetables">Vegetables</option>
+                            <option value="fruits">Fruits</option>
+                            <option value="grains">Grains</option>
+                            <option value="dairy">Dairy</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Price Range:</label>
+                        <select id="price-filter">
+                            <option value="all">All Prices</option>
+                            <option value="0-10000">Under 10,000 shs</option>
+                            <option value="10000-25000">10,000 - 25,000 shs</option>
+                            <option value="25000-50000">25,000 - 50,000 shs</option>
+                            <option value="50000+">Over 50,000 shs</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <input type="text" id="search-input" placeholder="Search products..." />
+                    </div>
+                </div>
+                
+                <!-- Products Grid -->
+                <div class="products-grid" id="products-grid">
+                    <!-- Ugandan Products -->
+                    <div class="product-card fade-in">
+                        <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Fresh Matooke" class="product-image" />
+                        <div class="product-info">
+                            <h3 class="product-name">Fresh Matooke (Green Bananas)</h3>
+                            <p class="product-description">Organic matooke from Buganda region, perfect for steaming</p>
+                            <div class="product-price">
+                                <span class="current-price">15,000 shs</span>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary add-to-cart" onclick="addToCart('prod-1')">
+                                    <i data-lucide="shopping-cart"></i>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card fade-in">
+                        <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Sweet Bananas" class="product-image" />
+                        <div class="product-info">
+                            <h3 class="product-name">Sweet Yellow Bananas</h3>
+                            <p class="product-description">Ripe sweet bananas from Mbale district</p>
+                            <div class="product-price">
+                                <span class="current-price">7,200 shs</span>
+                                <span class="original-price">8,000 shs</span>
+                                <span class="discount-badge">10% OFF</span>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary add-to-cart" onclick="addToCart('prod-2')">
+                                    <i data-lucide="shopping-cart"></i>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card fade-in">
+                        <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Fresh Tomatoes" class="product-image" />
+                        <div class="product-info">
+                            <h3 class="product-name">Fresh Tomatoes</h3>
+                            <p class="product-description">Juicy red tomatoes from Kasese valley</p>
+                            <div class="product-price">
+                                <span class="current-price">5,000 shs</span>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary add-to-cart" onclick="addToCart('prod-3')">
+                                    <i data-lucide="shopping-cart"></i>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card fade-in">
+                        <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Posho Flour" class="product-image" />
+                        <div class="product-info">
+                            <h3 class="product-name">Posho (Maize Flour)</h3>
+                            <p class="product-description">Fine white maize flour from Teso region</p>
+                            <div class="product-price">
+                                <span class="current-price">3,325 shs</span>
+                                <span class="original-price">3,500 shs</span>
+                                <span class="discount-badge">5% OFF</span>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary add-to-cart" onclick="addToCart('prod-4')">
+                                    <i data-lucide="shopping-cart"></i>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card fade-in">
+                        <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Fresh Milk" class="product-image" />
+                        <div class="product-info">
+                            <h3 class="product-name">Fresh Milk</h3>
+                            <p class="product-description">Pure cow milk from Ankole cattle</p>
+                            <div class="product-price">
+                                <span class="current-price">2,500 shs</span>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary add-to-cart" onclick="addToCart('prod-5')">
+                                    <i data-lucide="shopping-cart"></i>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card fade-in">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Sweet Potatoes" class="product-image" />
+                        <div class="product-info">
+                            <h3 class="product-name">Sweet Potatoes</h3>
+                            <p class="product-description">Orange-fleshed sweet potatoes from Soroti</p>
+                            <div class="product-price">
+                                <span class="current-price">4,000 shs</span>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary add-to-cart" onclick="addToCart('prod-6')">
+                                    <i data-lucide="shopping-cart"></i>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <button class="cart-close" id="cart-close">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <p style="text-align: center; color: #6B7280; padding: 40px 0;">Your cart is empty<br><small>Add some fresh Ugandan produce to get started!</small></p>
+        </div>
+        <div class="cart-summary" id="cart-summary">
+            <!-- Cart summary will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Chat Modal -->
+    <div class="modal" id="chat-modal">
+        <div class="modal-content chat-modal-content">
+            <div class="modal-header">
+                <h3>Chat with Farmers</h3>
+                <button class="modal-close" id="chat-close">&times;</button>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Chat messages will be populated by JavaScript -->
+            </div>
+            <div class="chat-input-container">
+                <input type="text" id="chat-input" placeholder="Type your message..." />
+                <button class="btn btn-primary" id="send-message">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="notifications" id="notifications">
+        <!-- Notifications will be populated by JavaScript -->
+    </div>
+
+    <!-- Cart Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
